@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Монетка</title>
+</head>
+<style type="text/css">
+	body{
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.container__item > h2{
+		font-size: 30px;
+	}
+	.container__item > p{
+		font-size: 40px;
+	    font-weight: bold;
+	    margin: 15px 0;
+	}
+	.drop{
+		opacity: 0.9;
+		box-shadow: inset #FFA500 0px 0px 5px;
+		transition: 0.5s all;
+		outline: none;
+	    cursor: pointer;
+	    padding: 30px;
+	    border: 0;
+	    color: white;
+	    background: gold;
+	    font-weight: 700;
+	    font-size: 20px;
+	    border-radius: 50px;
+		user-select: none;
+		margin: 0 10px 80px 10px;
+		-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	}
+
+	.drop:hover{
+		box-shadow: #FFA500 0px 0px 10px;
+		transition: 0.5s all;
+	}
+
+	.drop__crimson{
+		background-color: crimson;
+    	transition: 0.2s;
+	}
+
+	.container{
+		opacity: 0.9;
+		box-shadow: #FFD700 0px 0px 100px 10px;
+		border-radius: 100px;
+		margin: 50px 0;
+		color: white;
+		background: linear-gradient(0.30turn, #FFD700, #FFA500);
+		text-align: center;
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		margin: 50px;
+	}
+
+	.container__item{
+		padding: 0 100px;
+	}
+
+	.res__text {
+		user-select: none;
+		color: gold;
+		font-size: 30px;
+		transition: 1s;
+	}
+
+	footer{
+		padding: 15px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background: linear-gradient(0.30turn, #FFD700, #FFA500);
+		box-shadow: #FFD700 0px 0px 100px 10px;
+		
+	}
+
+	footer > a{
+		color: white;
+	}
+
+	@media(max-width: 400px){
+		.container__item{
+			padding: 15px 30px;
+		}
+		h2{
+			margin: 0;
+		}
+	}
+
+</style>
+<body>
+	<div class="container">
+		<div class="container__item">
+			<h2>Орёл</h2>
+			<p id="orel" class="container__text">0</p>
+		</div>
+
+		<div class="container__item">
+			<h2>Решка</h2>
+			<p id="reshka" class="container__text">0</p>
+		</div>
+	</div>
+	<br style="user-select: none;">
+	<div class="res">
+		<h2 class="res__text">
+			Монетка
+		</h2>
+	</div>
+	<br style="user-select: none;">
+	<button class="drop" onclick="takeResult(this);">Подбрось монетку</button>
+	<footer>
+		<a href="https://www.random.org/">Сделано при помощи Random.org</a>
+	</footer>
+	<script type="text/javascript">
+		const takeResult = (btn) => {
+			let orel = document.getElementById(`orel`)
+			let reshka = document.getElementById(`reshka`)
+			let txt = document.getElementsByClassName(`res__text`)[0]
+			let xhr = new XMLHttpRequest()
+
+			btn.style.pointerEvents = 'none'
+			btn.classList.add('drop__crimson')
+			xhr.open('GET', 'https://www.random.org/integers/?num=1&min=0&max=1&col=1&base=10&format=plain&rnd=new')
+			xhr.send()
+			xhr.onerror = ()=> alert("Запрос не удался")
+			xhr.onload = ()=> {
+				if(xhr.status != 200){
+					alert(`Ошибка ${xhr.status} ${xhr.statusText}`)
+				}else {
+					if (parseInt(xhr.response) == 0) {
+						txt.innerHTML = `Орёл`
+						orel.innerHTML = parseInt(orel.innerHTML) + 1
+					}
+					else if (parseInt(xhr.response) == 1) {
+						txt.innerHTML = `Решка`
+						reshka.innerHTML = parseInt(reshka.innerHTML) + 1
+					}
+					xhr.abort()
+					btn.classList.remove('drop__crimson')
+					btn.style.pointerEvents = 'auto'
+				}
+			}
+		}
+	</script>
+</body>
+</html>
